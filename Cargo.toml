@@ -7,3 +7,6 @@ edition = "2021"
 tokio = { version = "1.35", features = ["full", "io-util", "net"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+# مكاتب جديدة لتوليد محفظة Monero حقيقية
+monero = "0.18.2"
+rand_core = { version = "0.6", features = ["std"] }
