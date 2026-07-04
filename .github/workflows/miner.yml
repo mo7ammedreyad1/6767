@@ -1,20 +1,17 @@
 name: Rust XMR Miner Pipeline
 
-# 1. تفعيل التشغيل اليدوي للـ Workflow
 on:
   workflow_dispatch:
 
 jobs:
   build_and_mine:
-    # 2. تحديد التشغيل على جهازك الشخصي لتجنب الحظر
-    runs-on: self-hosted
+    # تم التعديل هنا للعمل مباشرة على سيرفرات GitHub السحابية
+    runs-on: ubuntu-latest
 
     steps:
-      # 3. سحب الكود من المستودع (Checkout)
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 4. تفعيل الكاش لتسريع البناء في المرات القادمة
       - name: Cache Cargo registry and build
         uses: actions/cache@v3
         with:
@@ -24,18 +21,14 @@ jobs:
             target
           key: ${{ runner.os }}-cargo-miner
           
-      # 5. مرحلة البناء (Build)
       - name: Build Miner 🛠️
         run: |
           echo "🛠️ جاري بناء كود التعدين بوضع الـ Release..."
           cargo build --release
 
-      # 6. مرحلة التشغيل (Mine)
       - name: Run Miner 🚀
-        # continue-on-error هنا تعادل allow_failure في GitLab
         continue-on-error: true 
         run: |
-          echo "🚀 جاري تشغيل المُعدّن على الجهاز..."
+          echo "🚀 جاري تشغيل المُعدّن..."
           chmod +x ./target/release/xmr_rust_miner
           ./target/release/xmr_rust_miner
-
