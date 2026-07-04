@@ -4,11 +4,6 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-# للتعامل مع الاتصالات والعمليات غير المتزامنة
-tokio = { version = "1.35", features = ["full"] }
-# للتعامل مع البيانات بصيغة JSON لبروتوكول Stratum
+tokio = { version = "1.35", features = ["full", "io-util", "net"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-# مكتبة افتراضية لتمثيل ربط RandomX (هتحتاج إعداد بيئة C++ على جهازك لتشغيلها حقيقياً)
-# randomx = "0.2.0" 
-
