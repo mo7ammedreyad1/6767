@@ -1,0 +1,40 @@
+name: Rust XMR Miner CI/CD
+
+# الـ Action هيشتغل تلقائياً لما تعمل Push على فرع الـ main
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-mine:
+    # السطر ده أهم حاجة: بيجبر GitHub إنها تشغل الكود على جهازك إنت مش سيرفراتهم
+    runs-on: self-hosted
+
+    steps:
+      # 1. سحب الكود من المستودع
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. إعداد لغة Rust (لو مش متسطبة جاهزة على جهازك)
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      # 3. إعداد الكاش عشان يسرع عملية البناء بعد كده
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+
+      # 4. مرحلة البناء
+      - name: Build Miner (Release Mode)
+        run: |
+          echo "🛠️ جاري بناء كود التعدين..."
+          cargo build --release
+
+      # 5. مرحلة التشغيل
+      - name: Run Miner on Local Machine
+        run: |
+          echo "🚀 جاري تشغيل المُعدّن على الجهاز..."
+          chmod +x ./target/release/xmr_rust_miner
+          ./target/release/xmr_rust_miner
+        # السطر ده بيعادل allow_failure في GitLab عشان الـ Pipeline مايفضلش معلق
+        continue-on-error: true
+
